@@ -1,0 +1,43 @@
+clear, clc;
+data = load('anli15_2.txt');
+data = data';
+
+%创建训练与测试数据
+input_train = data(1 : 4, 1 : 15);
+output_train = data(5, 1 : 15);
+input_test = data(1 : 4, :);
+output_test = data(5, :);
+
+%构建BP神经网络
+% net.trainFcn = ''; % 贝叶斯正则化算法;
+net = newff(input_train, output_train, [10, 10]);  % 设置神经网络隐藏层的层数即神经元个数
+net.trainParam.epochs = 10000;      %训练次数
+net.trainParam.lr = 0.00001;      %学习速率
+net.trainParam.goal = 0.000001;         %训练目标最小误差
+net.trainParam.max_fail = 10;            %最大确认失败次数
+
+%模型训练
+net = train(net, input_train, output_train);
+
+%模型测试
+result = sim(net, input_test);
+plot(output_test, 'o-b'); hold on
+plot(result, '*-r'); hold on
+legend('实际值', '预测值');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
